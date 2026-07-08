@@ -1,6 +1,7 @@
 import streamlit as st
 from openai import OpenAI
 from dotenv import load_dotenv
+from chat_loader import stream_with_thinking_loader
 
 load_dotenv()
 
@@ -45,8 +46,8 @@ if prompt:
 
     # AI 응답 생성
     with st.chat_message("assistant"):
-        with st.spinner("답변 생성 중...", show_time=True):
-            response = st.write_stream(llm_stream(prompt))
+        loader = st.empty()
+        response = st.write_stream(stream_with_thinking_loader(llm_stream(prompt), loader))
 
     # AI 응답 저장
     st.session_state.messages.append({

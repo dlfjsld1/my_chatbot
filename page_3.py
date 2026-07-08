@@ -1,5 +1,6 @@
 import streamlit as st
 from langchain_openai.chat_models import ChatOpenAI
+from chat_loader import stream_with_thinking_loader
 
 st.title("page3")
 
@@ -43,8 +44,8 @@ if prompt := st.chat_input("메시지를 입력하세요"):
 
         # 어시스턴트 응답 스트리밍
         with st.chat_message("assistant"):
-            with st.spinner("답변 생성 중...", show_time=True):
-                response = st.write_stream(llm_stream(prompt))
+            loader = st.empty()
+            response = st.write_stream(stream_with_thinking_loader(llm_stream(prompt), loader))
             st.feedback(
                 "thumbs",
                 key=f"feedback_{len(st.session_state.history)}",
